@@ -1,0 +1,68 @@
+import java.util.Scanner;
+
+class D{
+   int v;
+   char d;
+
+   D(){
+       v = 0;
+       d = 'h';
+   }
+}
+public class Lrs {
+   public static void findlrs(String a){
+       int m = a.length();
+       int n = a.length();
+       D[][]cost = new D[m+1][n+1];
+       for(int i =0 ; i<=m ; i++){
+           for(int j = 0 ; j<= n ;j++){
+               cost[i][j] = new D();
+           }
+       }
+       for(int i = 1; i<=m ; i++){
+           for(int j = 1; j<=n ; j++){
+               if(a.charAt(i-1) == a.charAt(j-1)&&i!=j){
+                   cost[i][j].v = cost[i-1][j-1].v+1;
+                   cost[i][j].d = 'd';
+               }
+               else {
+                   if (cost[i - 1][j].v >= cost[i][j - 1].v) {
+                       cost[i][j].v = cost[i - 1][j].v;
+                       cost[i][j].d = 'u';
+                   } else {
+                       cost[i][j].v = cost[i][j - 1].v;
+                       cost[i][j].d = 's';
+                   }
+               }
+           }
+       }
+       System.out.println("LONGEST REPEATING SUBSEQUENCE IS:- ");
+       Printlrs(m , n , cost , a);
+       System.out.println();
+       System.out.println("LENGHT OF THE LRS IS:- "+cost[m][n].v);
+   }
+   public static void Printlrs(int i , int j , D[][]cost , String a){
+       if(i == 0 || j==0){
+           return;
+       }
+       else{
+           if(cost[i][j].d == 'd'){
+               Printlrs(i-1 , j-1 , cost , a);
+               System.out.print(a.charAt(i-1));
+           } else if (cost[i][j].d == 'u') {
+               Printlrs(i-1 , j , cost , a);
+           }
+           else{
+               Printlrs(i , j-1 , cost , a);
+           }
+       }
+   }
+
+   public static void main(String[] args) {
+       Scanner S = new Scanner(System.in);
+       System.out.println("ENTER STRING 1:- ");
+       String a = S.next();
+
+       findlrs(a);
+   }
+}
